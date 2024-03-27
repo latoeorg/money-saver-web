@@ -3,7 +3,7 @@ import type { Router } from 'vue-router'
 export const setupGuards = (router: Router) => {
   // 👉 router.beforeEach
   // Docs: https://router.vuejs.org/guide/advanced/navigation-guards.html#global-before-guards
-  router.beforeEach(to => {
+  router.beforeEach(async to => {
     /*
      * If it's a public route, continue navigation. This kind of pages are allowed to visited by login & non-login users. Basically, without any restrictions.
      * Examples of public routes are, 404, under maintenance, etc.
@@ -15,7 +15,9 @@ export const setupGuards = (router: Router) => {
      * Check if user is logged in by checking if token & user data exists in local storage
      * Feel free to update this logic to suit your needs
      */
-    const isLoggedIn = !!(localStorage.getItem('App-User') && localStorage.getItem('App-Token'))
+
+    const session = await supabaseClient.auth.getSession()
+    const isLoggedIn = !!session.data.session?.access_token
 
     // const isLoggedIn = !!(useCookie('App-User').value && useCookie('App-Token').value)
 
@@ -30,6 +32,10 @@ export const setupGuards = (router: Router) => {
       else
         return undefined
     }
+
+    // If user is not logged in, redirect to login page
+    if (!isLoggedIn)
+      return { name: 'login' }
 
     // if (!canNavigate(to)) {
     //   /* eslint-disable indent */

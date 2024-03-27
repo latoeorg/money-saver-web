@@ -1,5 +1,18 @@
 <script setup lang="ts">
 import avatar1 from '@images/avatars/avatar-1.png'
+
+const router = useRouter()
+
+async function handleSignOut() {
+  const { error } = await supabaseClient.auth.signOut()
+
+  console.log(error)
+
+  if (error)
+    return sonner.error(error.message)
+
+  router.push({ name: 'login' })
+}
 </script>
 
 <template>
@@ -111,7 +124,7 @@ import avatar1 from '@images/avatars/avatar-1.png'
           <VDivider class="my-2" />
 
           <!-- 👉 Logout -->
-          <VListItem to="/login">
+          <VListItem @click="handleSignOut">
             <template #prepend>
               <VIcon
                 class="me-2"

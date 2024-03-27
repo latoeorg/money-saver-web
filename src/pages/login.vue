@@ -17,8 +17,8 @@ const isPasswordVisible = ref(false)
 const router = useRouter()
 
 const form = ref({
-  email: '',
-  password: '',
+  email: 'lazlanrafar@gmail.com',
+  password: 'Pass1234',
   remember: false,
 })
 
@@ -35,6 +35,7 @@ const handleSubmit = async () => {
       return sonner.error(error.message)
 
     sonner.success('Logged in successfully!')
+
     router.push({ name: 'root' })
   }
 }
