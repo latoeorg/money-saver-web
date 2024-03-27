@@ -1,20 +1,20 @@
 <script setup lang="ts">
+import { VForm } from 'vuetify/components/VForm'
+
 import AuthProvider from '@/views/pages/authentication/AuthProvider.vue'
-import { useGenerateImageVariant } from '@core/composable/useGenerateImageVariant'
-import authV2LoginIllustrationBorderedDark from '@images/pages/auth-v2-login-illustration-bordered-dark.png'
-import authV2LoginIllustrationBorderedLight from '@images/pages/auth-v2-login-illustration-bordered-light.png'
-import authV2LoginIllustrationDark from '@images/pages/auth-v2-login-illustration-dark.png'
-import authV2LoginIllustrationLight from '@images/pages/auth-v2-login-illustration-light.png'
-import authV2MaskDark from '@images/pages/misc-mask-dark.png'
-import authV2MaskLight from '@images/pages/misc-mask-light.png'
 import { VNodeRenderer } from '@layouts/components/VNodeRenderer'
 import { themeConfig } from '@themeConfig'
 
 definePage({
   meta: {
     layout: 'blank',
+    unauthenticatedOnly: true,
   },
 })
+
+const refForm = ref<VForm>()
+const isPasswordVisible = ref(false)
+const router = useRouter()
 
 const form = ref({
   email: '',
@@ -22,43 +22,30 @@ const form = ref({
   remember: false,
 })
 
-const isPasswordVisible = ref(false)
+const handleSubmit = async () => {
+  const valid = await refForm.value?.validate()
 
-const authThemeImg = useGenerateImageVariant(
-  authV2LoginIllustrationLight,
-  authV2LoginIllustrationDark,
-  authV2LoginIllustrationBorderedLight,
-  authV2LoginIllustrationBorderedDark,
-  true)
+  if (valid) {
+    const { error } = await supabaseClient.auth.signInWithPassword({
+      email: form.value.email,
+      password: form.value.password,
+    })
 
-const authThemeMask = useGenerateImageVariant(authV2MaskLight, authV2MaskDark)
+    if (error)
+      return sonner.error(error.message)
+
+    sonner.success('Logged in successfully!')
+    router.push({ name: 'root' })
+  }
+}
 </script>
 
 <template>
   <VRow
     no-gutters
     class="auth-wrapper bg-surface"
+    justify="center"
   >
-    <VCol
-      md="8"
-      class="d-none d-md-flex"
-    >
-      <div class="position-relative bg-background rounded-lg w-100 ma-8 me-0">
-        <div class="d-flex align-center justify-center w-100 h-100">
-          <VImg
-            max-width="505"
-            :src="authThemeImg"
-            class="auth-illustration mt-16 mb-2"
-          />
-        </div>
-
-        <VImg
-          class="auth-footer-mask"
-          :src="authThemeMask"
-        />
-      </div>
-    </VCol>
-
     <VCol
       cols="12"
       md="4"
@@ -82,7 +69,10 @@ const authThemeMask = useGenerateImageVariant(authV2MaskLight, authV2MaskDark)
           </p>
         </VCardText>
         <VCardText>
-          <VForm @submit.prevent="() => { }">
+          <VForm
+            ref="refForm"
+            @submit.prevent="handleSubmit"
+          >
             <VRow>
               <!-- email -->
               <VCol cols="12">
