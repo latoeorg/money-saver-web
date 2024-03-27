@@ -50,7 +50,7 @@ const handleSubmit = async () => {
     <VCol
       cols="12"
       md="4"
-      class="auth-card-v2 d-flex align-center justify-center"
+      class="d-flex align-center justify-center"
     >
       <VCard
         flat

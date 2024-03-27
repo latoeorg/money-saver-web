@@ -1,18 +1,19 @@
 <script setup lang="ts">
 import avatar1 from '@images/avatars/avatar-1.png'
 
+const user = JSON.parse(localStorage.getItem('user') as string)
 const router = useRouter()
 
 async function handleSignOut() {
   const { error } = await supabaseClient.auth.signOut()
-
-  console.log(error)
 
   if (error)
     return sonner.error(error.message)
 
   router.push({ name: 'login' })
 }
+
+console.log(user)
 </script>
 
 <template>
@@ -61,9 +62,9 @@ async function handleSignOut() {
             </template>
 
             <VListItemTitle class="font-weight-semibold">
-              John Doe
+              {{ user.email }}
             </VListItemTitle>
-            <VListItemSubtitle>Admin</VListItemSubtitle>
+            <!-- <VListItemSubtitle>Admin</VListItemSubtitle> -->
           </VListItem>
 
           <VDivider class="my-2" />

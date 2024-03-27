@@ -19,6 +19,9 @@ export const setupGuards = (router: Router) => {
     const session = await supabaseClient.auth.getSession()
     const isLoggedIn = !!session.data.session?.access_token
 
+    if (isLoggedIn)
+      localStorage.setItem('user', JSON.stringify(session.data.session?.user))
+
     // const isLoggedIn = !!(useCookie('App-User').value && useCookie('App-Token').value)
 
     /*
