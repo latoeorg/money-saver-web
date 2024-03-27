@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Toaster } from 'vue-sonner'
 import { useTheme } from 'vuetify'
 import ScrollToTop from '@core/components/ScrollToTop.vue'
 import initCore from '@core/initCore'
@@ -22,5 +23,7 @@ const configStore = useConfigStore()
 
       <ScrollToTop />
     </VApp>
+
+    <Toaster rich-colors />
   </VLocaleProvider>
 </template>

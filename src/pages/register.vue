@@ -26,14 +26,33 @@ definePage({
   },
 })
 
+const refForm = ref<VForm>()
+const isPasswordVisible = ref(false)
+const router = useRouter()
+
 const form = ref({
-  username: '',
   email: '',
   password: '',
   privacyPolicies: false,
 })
 
-const isPasswordVisible = ref(false)
+const handleSubmit = async () => {
+  const valid = await refForm.value?.validate()
+
+  if (valid) {
+    const { error } = await supabaseClient.auth.signUp({
+      email: form.value.email,
+      password: form.value.password,
+    })
+
+    if (error)
+      return sonner.error(error.message)
+
+    sonner.success('Account created successfully!')
+
+    router.push({ name: 'login' })
+  }
+}
 </script>
 
 <template>
@@ -86,19 +105,11 @@ const isPasswordVisible = ref(false)
         </VCardText>
 
         <VCardText>
-          <VForm @submit.prevent="() => {}">
+          <VForm
+            ref="refForm"
+            @submit.prevent="handleSubmit"
+          >
             <VRow>
-              <!-- Username -->
-              <VCol cols="12">
-                <AppTextField
-                  v-model="form.username"
-                  :rules="[requiredValidator]"
-                  autofocus
-                  label="Username"
-                  placeholder="Johndoe"
-                />
-              </VCol>
-
               <!-- email -->
               <VCol cols="12">
                 <AppTextField
@@ -143,6 +154,7 @@ const isPasswordVisible = ref(false)
                 <VBtn
                   block
                   type="submit"
+                  :disabled="!form.privacyPolicies"
                 >
                   Sign up
                 </VBtn>

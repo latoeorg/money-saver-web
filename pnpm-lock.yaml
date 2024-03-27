@@ -118,6 +118,9 @@ dependencies:
   vue-router:
     specifier: ^4.2.5
     version: 4.2.5(vue@3.3.8)
+  vue-sonner:
+    specifier: ^1.1.2
+    version: 1.1.2
   vue3-apexcharts:
     specifier: ^1.4.4
     version: 1.4.4(apexcharts@3.44.0)(vue@3.3.8)
@@ -8053,6 +8056,10 @@ packages:
       shepherd.js: 11.2.0
       vue: 3.3.8(typescript@5.2.2)
     dev: true
+
+  /vue-sonner@1.1.2:
+    resolution: {integrity: sha512-yg4f5s0a3oiiI7cNvO0Dajux1Y7s04lxww3vnQtnwQawJ3KqaKA9RIRMdI9wGTosRGIOwgYFniFRGl4+IuKPZw==}
+    dev: false
 
   /vue-template-compiler@2.7.15:
     resolution: {integrity: sha512-yQxjxMptBL7UAog00O8sANud99C6wJF+7kgbcwqkvA38vCGF7HWE66w0ZFnS/kX5gSoJr/PQ4/oS3Ne2pW37Og==}
